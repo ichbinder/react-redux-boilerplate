@@ -1,0 +1,18 @@
+.Navigation {
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(55, 55, 55, 0.32);
+  margin: auto;
+  margin-bottom: 3%;
+  margin-top: 3%;
+  width: 60%;
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  padding: 0;
+}
+
+.Navigation > .Navigation-button {
+  margin: 3%;
+  width: 25%;
+  font-size: 1.3vw;
+}

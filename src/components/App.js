@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Navigation from './Navigation';
 import '../styles/App.css';
 
 class App extends Component {
@@ -6,8 +7,9 @@ class App extends Component {
     return (
       <div className="App">
         <div className="App-header">
-          <h1>React App</h1>
+          <h1>KNX Analyse</h1>
         </div>
+        <Navigation />
       </div>
     );
   }

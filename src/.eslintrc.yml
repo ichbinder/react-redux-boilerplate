@@ -1,0 +1,24 @@
+  extends: "airbnb"
+  plugins: ["react"]
+  env:
+    node: true
+  rules:
+    array-bracket-spacing: ["off"]
+    curly: "off"
+    comma-dangle: ["error", "only-multiline"]
+    computed-property-spacing: ["off"]
+    no-console: "off"
+    no-underscore-dangle: "off"
+    no-param-reassign: "off"
+    space-in-parens: ["error", "always"]
+    react/prop-types: [0]
+    jsx-a11y/href-no-hash: "off"
+    jsx-a11y/anchor-is-valid:
+      - warn
+      - aspects:
+        - invalidHref
+    react/jsx-filename-extension:
+      - 1
+      - extensions:
+        - ".js"
+        - ".jsx"

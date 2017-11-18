@@ -1,26 +1,67 @@
-// import superagent from 'superagent';
-// import jsonp from 'superagent-jsonp';
-//
-// export function incrementCounter() {
-//     return {type: "INCREMENT"};
-// }
-//
-// export function addTodo(title) {
-//     return {type: "TODO_ADD", title: title};
-// }
-//
-// export function wikipediaSearch(keyword) {
-//     return function(dispatch) {
-//         let url = "https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=" + keyword + "&format=json&callback=JSONP_CALLBACK";
-//         superagent
-//             .get(url)
-//             .use(jsonp({
-//                 callbackName: 'JSONP_CALLBACK'
-//             }))
-//             .end((err, res) => {
-//                 dispatch({type: "WIKIPEDIA_SEARCH", keyword: keyword, res: res})
-//             })
-//
-//
-//     }
-// }
+import axios from 'axios';
+
+
+export function paScanInput( paString ) {
+  return { type: 'PA_INPUT', paString };
+}
+
+export function startPaScan( phyAddress ) {
+  return ( dispatch ) => {
+    axios.defaults.baseURL = 'http://playground.cm.htw-berlin.de:8020/';
+    // axios.defaults.baseURL = 'http://localhost:8020/';
+    axios.post( '/api/scanKnx', { phyAddress } )
+      .then( ( response ) => {
+        console.log( 'testtest:', response );
+        dispatch( { type: 'START_PA_SCAN', psStartScanResolve: response.data } );
+      } )
+      .catch( ( error ) => {
+        console.log( error );
+        dispatch( { type: 'START_PA_SCAN', psStartScanResolve: 'error' } );
+      } );
+  };
+}
+
+export function createWsForPaScan() {
+  return ( dispatch ) => {
+    // öffnet ein Websocket zum Backend um so die erscanten ergebnisse von PA
+    // in die Webseite zu hollen
+    /* eslint no-undef: "error" */
+    /* eslint-env browser */
+    const scanWs = new WebSocket( 'ws://playground.cm.htw-berlin.de:8020/api/getScanResoult' );
+    // const scanWs = new WebSocket( 'ws://localhost:8020/api/getScanResoult' );
+    scanWs.onopen = () => {
+      scanWs.send( 'Connectet' ); // Send the message 'Ping' to the server
+      dispatch( { type: 'CREATE_WS_FOR_PA_SCAN', sws: scanWs } );
+    };
+  };
+}
+
+export function createWsForMonitor() {
+  return ( dispatch ) => {
+    /* eslint no-undef: "error" */
+    /* eslint-env browser */
+    // die URL zum WebSocket. Er dient zum stream für den BusMonitor.
+    const monitorWs = new WebSocket( 'ws://playground.cm.htw-berlin.de:8020/api/busMonitor' );
+    // const monitorWs = new WebSocket( 'ws://localhost:8020/api/busMonitor' );
+    monitorWs.onopen = () => {
+      monitorWs.send( 'Connectet' ); // Send the message 'Ping' to the server
+      dispatch( { type: 'CREATE_WS_FOR_MONITOR', mws: monitorWs } );
+    };
+  };
+}
+
+export function updatePaScanLog( newLog ) {
+  return { type: 'UPDATE_PA_SCAN_LOG', newLog };
+}
+
+export function updateBusMonitorLog( newBusLog ) {
+  return { type: 'UPDATE_MONITOR_LOG', newBusLog };
+}
+
+export function monitoringSwitchOnOff( onOff ) {
+  return { type: 'MONITORING_ON_OFF', onOff };
+}
+
+export function filterSysGASwitchOnOff( onOff ) {
+  return { type: 'FILTER_SYS_GA_ON_OFF', onOff };
+}

@@ -1,8 +1,12 @@
 import { combineReducers } from 'redux';
-import todo from './todo';
+import paScan from './paScan';
+import wsCreator from './wsCreator';
+import busMonitor from './busMonitor';
 
-let reduce = combineReducers({
-  todo: todo
-});
+const reduce = combineReducers( {
+  paScan,
+  ws: wsCreator,
+  busMonitor
+} );
 
 export default reduce;
