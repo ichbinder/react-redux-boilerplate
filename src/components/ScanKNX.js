@@ -15,18 +15,15 @@ import '../styles/ScanKNX.css';
 class ScanKNX extends Component {
   constructor( props ) {
     super( props );
-    props.createWsForPaScan();
-  }
-
-  componentWillUnmount() {
-    this.props.ws.close();
+    props.createWsForPaScan( this.props.token );
   }
 
   render() {
     if ( this.props.ws !== null ) {
       console.log( this.props.paScan.paScanLog );
-      console.log( this.props.ws );
+      console.log( 'ws action: ', this.props.ws );
       this.props.ws.onmessage = ( value ) => {
+        console.log( 'testws: ', value );
         this.props.updatePaScanLog( `${this.props.paScan.paScanLog}\n ${value.data}` );
       };
     }
@@ -35,13 +32,13 @@ class ScanKNX extends Component {
         <h2>KNX-Bus Scannen</h2>
         <div className="ScanKNX-menu">
           <div>
-                Bitte geben Sie eine oder mehrere phykalische Adresse ein:
+                  Bitte geben Sie eine oder mehrere phykalische Adresse ein:
           </div>
           <Input
             placeholder="z.B. 1.1.1 1.1.2 1.1.3-1.1.10"
             inputProps={{
-                  'aria-label': 'Description',
-                }}
+                    'aria-label': 'Description',
+                  }}
             className="ScanKNX-input"
             onChange={( event ) => { this.props.paScanInput( event.target.value ); }}
             value={this.props.phyAddress}
@@ -49,9 +46,9 @@ class ScanKNX extends Component {
           <Button
             raised
             color="primary"
-            onClick={() => { this.props.startPaScan( this.props.phyAddress ); }}
+            onClick={() => { this.props.startPaScan( this.props.phyAddress, this.props.token ); }}
           >
-            Start Scan
+              Start Scan
           </Button>
           <Logger css="ScanKNX-logger" output={this.props.paScan.paScanLog} />
         </div>
@@ -63,7 +60,8 @@ class ScanKNX extends Component {
 const mapStateToProps = state => ( {
   phyAddress: state.paScan.phyAddress,
   paScan: state.paScan,
-  ws: state.ws.wsPaScan
+  ws: state.ws.wsPaScan,
+  token: state.auth.token
 } );
 
 const mapDispatchToProps = {

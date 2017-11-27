@@ -10,7 +10,7 @@ const Navigation = () => (
       raised
       color="primary"
       component={NavLink}
-      to="/"
+      to="/ScanKNX"
       className="Navigation-button"
     >
         Scan KNX

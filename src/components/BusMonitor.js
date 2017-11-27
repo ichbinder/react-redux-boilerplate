@@ -19,7 +19,7 @@ class BusMonitor extends PureComponent {
   constructor( props ) {
     super( props );
 
-    props.createWsForMonitor();
+    props.createWsForMonitor( this.props.token );
 
     this._handleMonOnOffChange = this._handleMonOnOffChange.bind( this );
   }
@@ -30,7 +30,6 @@ class BusMonitor extends PureComponent {
 
   componentWillUnmount() {
     this.props.monitoringSwitchOnOff( false );
-    this.props.ws.close();
   }
 
   _handleMonOnOffChange() {
@@ -87,7 +86,8 @@ const mapStateToProps = state => ( {
   ws: state.ws.wsMonitor,
   log: state.busMonitor.monitorLog,
   monitoringOnOff: state.busMonitor.monitoringOnOff,
-  sysGaHide: state.busMonitor.sysGaHide
+  sysGaHide: state.busMonitor.sysGaHide,
+  token: state.auth.token
 } );
 
 const mapDispatchToProps = {

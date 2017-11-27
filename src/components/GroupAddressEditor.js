@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import { connect } from 'react-redux';
 import Ga100x from './reGa100x';
 import Ga300x from './reGa300x';
 import Ga500x from './reGa500x';
@@ -13,7 +14,7 @@ const SERVER_URL = 'http://playground.cm.htw-berlin.de:8020';
   * Die Webseite die das Analysieren von GA und DPT bereitstellt
   * Folgende DPT sind erlaubt DPT1, DPT3, DPT5
 * */
-export default class GroupAddr extends React.Component {
+export class GroupAddr extends React.Component {
   constructor( props ) {
     super( props );
     this.state = {
@@ -51,10 +52,12 @@ export default class GroupAddr extends React.Component {
 
   _getBuildingGa( dptRaw ) {
     const _this = this;
-    const urlData = `${SERVER_URL}/api/getAllGaOfDPT?dpt=${dptRaw}`;
+    // const urlData = `${SERVER_URL}/api/getAllGaOfDPT?dpt=${dptRaw}`;
+    axios.defaults.baseURL = `${SERVER_URL}/api/getAllGaOfDPT?dpt=${dptRaw}`;
+    axios.defaults.headers.common.Authorization = `Bearer ${this.props.token}`;
     this.serverRequest =
       axios
-        .get( urlData )
+        .get( )
         .then( ( result ) => {
           const stateTmp = Object.assign( {}, _this.state, { building: result.data.building } );
           console.log( stateTmp );
@@ -93,3 +96,14 @@ export default class GroupAddr extends React.Component {
     );
   }
 }
+
+const mapStateToProps = state => ( {
+  token: state.auth.token
+} );
+
+const mapDispatchToProps = {
+};
+
+const GroupAddrContainer = connect( mapStateToProps, mapDispatchToProps )( GroupAddr );
+
+export default GroupAddrContainer;
